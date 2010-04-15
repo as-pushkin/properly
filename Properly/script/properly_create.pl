@@ -1,26 +1,10 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
-use Getopt::Long;
-use Pod::Usage;
-use Catalyst::Helper;
 
-my $force = 0;
-my $mech  = 0;
-my $help  = 0;
-
-GetOptions(
-    'nonew|force'    => \$force,
-    'mech|mechanize' => \$mech,
-    'help|?'         => \$help
- );
-
-pod2usage(1) if ( $help || !$ARGV[0] );
-
-my $helper = Catalyst::Helper->new( { '.newfiles' => !$force, mech => $mech } );
-
-pod2usage(1) unless $helper->mk_component( 'Properly', @ARGV );
+use Catalyst::ScriptRunner;
+Catalyst::ScriptRunner->run('Properly', 'Create');
 
 1;
 
@@ -33,13 +17,12 @@ properly_create.pl - Create a new Catalyst Component
 properly_create.pl [options] model|view|controller name [helper] [options]
 
  Options:
-   -force        don't create a .new file where a file to be created exists
-   -mechanize    use Test::WWW::Mechanize::Catalyst for tests if available
-   -help         display this help and exits
+   --force        don't create a .new file where a file to be created exists
+   --mechanize    use Test::WWW::Mechanize::Catalyst for tests if available
+   --help         display this help and exits
 
  Examples:
    properly_create.pl controller My::Controller
-   properly_create.pl controller My::Controller BindLex
    properly_create.pl -mechanize controller My::Controller
    properly_create.pl view My::View
    properly_create.pl view MyView TT
@@ -68,7 +51,7 @@ Catalyst Contributors, see Catalyst.pm
 
 =head1 COPYRIGHT
 
-This library is free software, you can redistribute it and/or modify
+This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut

@@ -1,34 +1,42 @@
 package Properly;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
-
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime 5.80;
 
 # Set flags and add plugins for the application
 #
 #         -Debug: activates the debug mode for very useful log messages
 #   ConfigLoader: will load the configuration from a Config::General file in the
 #                 application's home directory
-# Static::Simple: will serve static files from the application's root 
+# Static::Simple: will serve static files from the application's root
 #                 directory
 
-use parent qw/Catalyst/;
-use Catalyst qw/-Debug
-                ConfigLoader
-                Static::Simple/;
-our $VERSION = '0.01';
+use Catalyst qw/
+    -Debug
+    ConfigLoader
+    Static::Simple
+/;
 
-# Configure the application. 
+extends 'Catalyst';
+
+our $VERSION = '0.01';
+$VERSION = eval $VERSION;
+
+# Configure the application.
 #
 # Note that settings in properly.conf (or other external
 # configuration file that you set up manually) take precedence
 # over this when using ConfigLoader. Thus configuration
 # details given here can function as a default configuration,
-# with a external configuration file acting as an override for
+# with an external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'Properly' );
+__PACKAGE__->config(
+    name => 'Properly',
+    # Disable deprecated behavior needed by old applications
+    disable_component_resolution_regex_fallback => 1,
+);
 
 # Start the application
 __PACKAGE__->setup();
@@ -52,11 +60,11 @@ L<Properly::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Andrei Protasovitski,,,
+Andrei Pratasavitski,,,
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
+This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
